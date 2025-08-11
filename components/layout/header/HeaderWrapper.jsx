@@ -42,9 +42,9 @@ const HeaderWrapper = ({ headerData, secMenu, regions }) => {
   const normalizedPath = getNormalizedPath(pathname, regions);
 
   const isHome = normalizedPath === "/";
-  const isCulturePage = normalizedPath === "/about/culture";
+  const isCulturePage = normalizedPath === "/culture";
   const isBlogPage = normalizedPath === "/blog";
-  const isInsightsCaseStudies = normalizedPath === "/case-studies";
+  const isInsightsCaseStudies = normalizedPath === "/insights-and-case-studies";
   const isReview = normalizedPath.includes("/reviews");
   const isPartner = normalizedPath === "/partners";
 
