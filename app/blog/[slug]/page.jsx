@@ -52,8 +52,8 @@ const SingleBlog = async ({params, searchParams }) => {
     const preview = resolvedSearchParams?.preview === "true";
     const blogsResponse = await getBlog(preview, resolvedParams.slug);
 
-    if (!blogsResponse) {
-        return <NotFound />
+    if (blogsResponse.data == null) {
+        return <NotFound />;
     }
 
     return (

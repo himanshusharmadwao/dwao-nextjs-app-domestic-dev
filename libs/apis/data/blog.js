@@ -47,7 +47,9 @@ export const getBlog = async (preview = false, slug) => {
     let finalResponse = await response.json();
     let mainBlog = finalResponse?.data?.[0];
 
-    if (!finalResponse?.data) return null;
+    if (!finalResponse?.data || finalResponse.data.length === 0) {
+      return { data: null, message: "Not Found" };
+    }
 
     const categorySlug = mainBlog?.category?.slug;
     let related = [];
