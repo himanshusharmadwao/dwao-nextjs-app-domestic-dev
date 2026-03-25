@@ -1,10 +1,7 @@
-import { getCategory } from '@/libs/apis/data/blog';
+import { getCategory, getAllBlogs } from '@/libs/apis/data/blog';
 import dynamicImport from 'next/dynamic';
 import { Suspense } from 'react';
-
-const BlogPost = dynamicImport(() => import('@/components/blog/blogPost'), {
-    loading: () => <div className="animate-pulse h-40 bg-gray-100 rounded"></div>
-});
+import BlogPost from '@/components/blog/blogPost';
 
 const ReachOut = dynamicImport(() => import('@/components/common/reachOut'), {
     loading: () => <div className="animate-pulse h-20 bg-gray-100 rounded"></div>
@@ -15,23 +12,31 @@ const LoadingPlaceholder = () => (
     <div className="w-full h-40 bg-gray-100 animate-pulse rounded"></div>
 );
 
-const BlogWrapper = async ({preview}) => {
+const ITEMS_PER_PAGE = 6;
 
-    const categoryResponse = await getCategory(preview);
+const BlogWrapper = async ({ preview }) => {
 
-    // console.log("categoryResponse: ", categoryResponse)
+    const [categoryResponse, blogsResponse] = await Promise.all([
+        getCategory(preview),
+        getAllBlogs(1, ITEMS_PER_PAGE, null, null, preview),
+    ]);
 
     return (
         <>
             {/* filter and blog listing */}
-            <Suspense fallback={<LoadingPlaceholder />}>
-                <BlogPost filterItems={categoryResponse?.data} variant="blogPosts" preview={preview}/>
-            </Suspense>
+            <BlogPost
+                filterItems={categoryResponse?.data}
+                variant="blogPosts"
+                preview={preview}
+                initialPosts={blogsResponse?.data || []}
+                initialTotalItems={blogsResponse?.meta?.pagination?.total || 0}
+                itemsPerPage={ITEMS_PER_PAGE}
+            />
 
             <Suspense fallback={<LoadingPlaceholder />}>
                 {/* Contact */}
-                <ReachOut preview={preview}/>
-            </Suspense >
+                <ReachOut preview={preview} />
+            </Suspense>
         </>
     );
 };

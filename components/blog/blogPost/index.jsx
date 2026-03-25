@@ -8,17 +8,15 @@ import OverlayCard from '@/components/common/overlayCard';
 import { getAllBlogs } from '@/libs/apis/data/blog';
 import { getAllInsightBlogs } from '@/libs/apis/data/insights';
 
-const BlogPost = ({ filterItems, variant, preview }) => {
-    // console.log(filterItems)
+const BlogPost = ({ filterItems, variant, preview, initialPosts, initialTotalItems, itemsPerPage }) => {
     const [selectedFilter, setSelectedFilter] = useState({ category: null, sub_category: null });
     const [currentPage, setCurrentPage] = useState(1);
-    const [posts, setPosts] = useState([]);
-    const [totalItems, setTotalItems] = useState(0);
+    const [posts, setPosts] = useState(initialPosts);
+    const [totalItems, setTotalItems] = useState(initialTotalItems);
     const [loading, setLoading] = useState(false);
-    const itemsPerPage = 6;
+    const [isInitial, setIsInitial] = useState(true);
 
     const handleFilterSelect = (category, sub_category) => {
-        // console.log(category, sub_category)
         if (sub_category === "reset") {
             setSelectedFilter({ category: null, sub_category: null });
             setCurrentPage(1);
@@ -26,20 +24,13 @@ const BlogPost = ({ filterItems, variant, preview }) => {
             setSelectedFilter({ category, sub_category });
             setCurrentPage(1);
         }
+        setIsInitial(false);
     };
 
-    // Fetch posts based on page and filters
+    // Fetch posts only on filter/page changes (not on initial load)
     const fetchPosts = async (page) => {
         setLoading(true);
         try {
-            // console.log('Fetching posts with filters:', {
-            //     page,
-            //     itemsPerPage,
-            //     category: selectedFilter.category,
-            //     sub_category: selectedFilter.sub_category,
-            //     variant
-            // });
-
             let response;
 
             if (variant === 'blogPosts') {
@@ -73,16 +64,18 @@ const BlogPost = ({ filterItems, variant, preview }) => {
         }
     };
 
-
     useEffect(() => {
+        // Skip the very first render — we already have server-fetched data
+        if (isInitial) {
+            return;
+        }
         fetchPosts(currentPage);
     }, [currentPage, selectedFilter]);
 
     const handlePageChange = (page) => {
         setCurrentPage(page);
+        setIsInitial(false);
     };
-
-    // console.log("posts: ", posts)
 
     return (
         <div className="container">

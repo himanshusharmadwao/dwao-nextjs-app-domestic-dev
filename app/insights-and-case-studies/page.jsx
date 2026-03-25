@@ -14,7 +14,6 @@ export async function generateMetadata() {
 const InsightCaseStudies = async ({ searchParams }) => {
     const paramsValue = await searchParams;
     const preview = paramsValue?.preview === "true";
-    // console.log("preview level 1: ", preview)
 
     return (
         <>
