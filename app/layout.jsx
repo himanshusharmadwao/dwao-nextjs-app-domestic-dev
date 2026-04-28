@@ -2,7 +2,6 @@ import Header from '@/components/layout/header'
 
 import '@/styles/global.css'
 import Footer from "@/components/layout/footer";
-import { getRegions } from '@/libs/apis/data/menu';
 import { headers } from 'next/headers';
 import Script from 'next/script';
 import FloatingForm from '@/components/floatingForm/FloatingForm';
@@ -19,8 +18,6 @@ export default async function RootLayout({ children, searchParams }) {
 
   const h = await headers();
   const preview = h.get('x-preview') === '1';
-
-  const regions = await getRegions(preview);
 
   return (
     <html lang="en">
@@ -63,23 +60,6 @@ export default async function RootLayout({ children, searchParams }) {
             `,
           }}
         />
-        {regions?.data?.map(region => {
-          const slug = region?.slug;
-          const hreflang = region?.hrefLang;
-          if (!hreflang) return null;
-          const url =
-            hreflang === "default"
-              ? process.env.NEXT_PUBLIC_DWAO_DOMESTIC_URL
-              : `${process.env.NEXT_PUBLIC_DWAO_DOMESTIC_URL}/${slug}`;
-          return (
-            <link
-              key={hreflang}
-              rel="alternate"
-              hrefLang={hreflang}
-              href={url}
-            />
-          );
-        })}
       </head>
       <body>
         <noscript>

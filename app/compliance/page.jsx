@@ -1,41 +1,39 @@
 import StructuredData from "@/components/StructuredData";
-import PrivacyPolicyWrapper from "@/components/wrapper/privacy-policy";
-import { getPolicy } from "@/libs/apis/data/privacyPolicy";
+import ComplianceWrapper from "@/components/wrapper/compliance";
+import { getCompliance } from "@/libs/apis/data/compliance";
 
 // 🔹 Centralized fetcher
-async function fetchPrivacyPolicyData(searchParams) {
+async function fetchComplianceData(searchParams) {
   const resolvedSearchParams = await searchParams;
   const preview = resolvedSearchParams?.preview === "true";
 
-  const policyResponse = await getPolicy(preview);
-  return { preview, policyResponse };
+  const complianceResponse = await getCompliance(preview);
+  return { preview, complianceResponse };
 }
 
 // 🔹 Generate dynamic metadata
 export async function generateMetadata({ searchParams }) {
-  const { policyResponse } = await fetchPrivacyPolicyData(searchParams);
+  const { complianceResponse } = await fetchComplianceData(searchParams);
 
-  if (!policyResponse) {
+  if (!complianceResponse) {
     return {
       title: "Data Not Found",
       description: "The requested source could not be found.",
     };
   }
 
-  const seo = policyResponse?.data?.[0]?.seo || {};
-
-  console.log("seo: ", seo)
+  const seo = complianceResponse?.data?.[0]?.seo || {};
 
   return {
-    title: seo?.metaTitle || policyResponse?.data?.[0]?.title,
-    description: seo?.metaDescription || policyResponse?.data?.[0]?.excerpt,
+    title: seo?.metaTitle || complianceResponse?.data?.[0]?.title,
+    description: seo?.metaDescription || complianceResponse?.data?.[0]?.excerpt,
     keywords: seo?.keywords
       ? seo.keywords.split(",").map((keyword) => keyword.trim())
       : [],
     alternates: {
       canonical:
         seo?.canonicalURL ||
-        `${process.env.NEXT_PUBLIC_DWAO_DOMESTIC_URL}/privacy-policy/`,
+        `${process.env.NEXT_PUBLIC_DWAO_DOMESTIC_URL}/compliance/`,
     },
     openGraph: {
       title: seo?.openGraph?.ogTitle,
@@ -57,10 +55,13 @@ export async function generateMetadata({ searchParams }) {
 }
 
 // 🔹 Page renderer
-const PrivacyPolicy = async ({ searchParams }) => {
-  const { preview, policyResponse } = await fetchPrivacyPolicyData(searchParams);
+const Compliance = async ({ searchParams }) => {
+  const { preview, complianceResponse } = await fetchComplianceData(searchParams);
 
-  const { data, error } = policyResponse || {};
+  const { data, error } = complianceResponse || {};
+
+  console.log("data: ", data)
+
   if (error) {
     return (
       <div className="h-screen block">
@@ -82,13 +83,13 @@ const PrivacyPolicy = async ({ searchParams }) => {
 
   return (
     <>
-      <StructuredData data={policyResponse?.data?.[0]?.seo?.structuredData} />
-      <PrivacyPolicyWrapper
-        policyResponse={policyResponse?.data[0]}
+      <StructuredData data={data?.[0]?.seo?.structuredData} />
+      <ComplianceWrapper
+        complianceResponse={data?.[0]}
         preview={preview}
       />
     </>
   );
 };
 
-export default PrivacyPolicy;
+export default Compliance;
