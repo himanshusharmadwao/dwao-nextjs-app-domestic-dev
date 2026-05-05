@@ -48,7 +48,7 @@ const Footer = async ({preview}) => {
             <div className="grid grid-cols-5">
               {/* Second Column */}
               <div className='col-span-2'>
-                 <QuickLinks data={quickLinks?.data[0]?.menu} />
+                 <QuickLinks data={quickLinks?.data?.[0]?.menu} />
               </div>
 
               {/* Third Column */}
@@ -74,7 +74,7 @@ const Footer = async ({preview}) => {
 
         {/* Legal and Social Links */}
         <div className="mt-14 border-t border-gray-700 pt-4 grid grid-cols-1 lg:grid-cols-2 gap-4 items-center">
-          <LegalLinks data={legalMenu?.data[0]?.menu} />
+          <LegalLinks data={legalMenu?.data?.[0]?.menu} />
 
           <SocialIcons links={socialLinks} />
         </div>
