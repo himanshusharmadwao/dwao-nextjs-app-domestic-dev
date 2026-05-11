@@ -42,11 +42,11 @@ const HeaderWrapper = ({ headerData, secMenu, regions }) => {
 
   // to get capabilities hrefs - memoized for performance
   const getCapabilitiesHrefs = useCallback((headerData) => {
-    const primaryMenu = headerData.data.find((item) => item.name === "PrimaryMenu");
+    const primaryMenu = headerData?.data?.find((item) => item.name === "PrimaryMenu");
 
     if (!primaryMenu) return [];
 
-    const capabilitiesMenu = primaryMenu.menu.find((item) => item.linkTitle === "Capabilities");
+    const capabilitiesMenu = primaryMenu?.menu?.find((item) => item.linkTitle === "Capabilities");
 
     if (!capabilitiesMenu) return [];
 
@@ -54,7 +54,7 @@ const HeaderWrapper = ({ headerData, secMenu, regions }) => {
       acc.push(subMenuItem.linkHref);
 
       if (subMenuItem.subSubMenu && subMenuItem.subSubMenu.length > 0) {
-        const subSubMenuHrefs = subMenuItem.subSubMenu.map((subSubMenuItem) => subSubMenuItem.linkHref);
+        const subSubMenuHrefs = subMenuItem?.subSubMenu?.map((subSubMenuItem) => subSubMenuItem.linkHref);
         acc.push(...subSubMenuHrefs);
       }
 
