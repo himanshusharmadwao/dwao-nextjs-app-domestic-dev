@@ -53,7 +53,7 @@ const Footer = async ({preview}) => {
 
               {/* Third Column */}
               <div className='col-span-2'>
-                {menuData.data.flatMap(item =>
+                {menuData?.data?.flatMap(item =>
                   item.menu.filter(nestedItem => nestedItem.linkTitle === "Capabilities")
                 ).map(nestedItem => (
                   <Column key={nestedItem.id} title="Capabilities" data={nestedItem.subMenu} />
@@ -62,7 +62,7 @@ const Footer = async ({preview}) => {
 
               {/* Fourth Column */}
               <div className="flex justify-end col-span-1">
-                {menuData.data.flatMap(item =>
+                {menuData?.data?.flatMap(item =>
                   item.menu.filter(nestedItem => nestedItem.linkTitle === "Partners")
                 ).map(nestedItem => (
                   <Column key={nestedItem.id} title="Partners" data={nestedItem.subMenu} />

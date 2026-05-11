@@ -43,6 +43,12 @@ export const getCategory = async (preview = false) => {
         next: { revalidate: getRevalidateTime(preview) },
       });
 
+      const contentType = response.headers.get("content-type") || "";
+      if (!response.ok || !contentType.includes("application/json")) {
+        const snippet = (await response.text()).slice(0, 120);
+        throw new Error(`getCategory: non-JSON response (HTTP ${response.status}) — ${snippet}`);
+      }
+
       let finalResponse = await response.json();
 
       let result;
@@ -196,6 +202,12 @@ export const getAllBlogs = async (
       let response = await debugFetch(url, {
         next: { revalidate: getRevalidateTime(preview) },
       });
+
+      const contentType = response.headers.get("content-type") || "";
+      if (!response.ok || !contentType.includes("application/json")) {
+        const snippet = (await response.text()).slice(0, 120);
+        throw new Error(`getAllBlogs: non-JSON response (HTTP ${response.status}) — ${snippet}`);
+      }
 
       let finalResponse = await response.json();
 

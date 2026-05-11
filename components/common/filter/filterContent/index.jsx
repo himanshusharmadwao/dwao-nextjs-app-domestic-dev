@@ -4,7 +4,8 @@ import FilterTab from '@/components/common/filter/filterTab';
 import Image from 'next/image';
 import React, { useState } from 'react'
 
-const FilterContent = ({ data, onFilterSelect }) => {
+const FilterContent = ({ data = [], onFilterSelect }) => {
+    const filters = data || [];
     // console.log(data)
     const [mobileFilter, setMobileFilter] = useState(false);
     const [openCategories, setOpenCategories] = useState({});
@@ -25,7 +26,7 @@ const FilterContent = ({ data, onFilterSelect }) => {
                 </div>
                 <div className='flex flex-wrap gap-4 mb-8'>
                     <div className="lg:flex hidden gap-4">
-                        {data.map((filter, index) => (
+                        {filters.map((filter, index) => (
                             <FilterTab
                                 key={index}
                                 data={filter}
@@ -53,7 +54,7 @@ const FilterContent = ({ data, onFilterSelect }) => {
                     className={`flex flex-col gap-5 absolute top-[170px] left-1/2 transform -translate-x-1/2 bg-white w-[95%] border border-[#ddd] p-4 rounded-[15px] z-10 transition-all duration-300 ${mobileFilter ? "opacity-100 visible translate-y-[-20px]" : "opacity-0 invisible translate-y-[20px]"
                         }`}
                 >
-                    {data.map((filter, index) => (
+                    {filters.map((filter, index) => (
                         <li
                             key={index}
                             className="flex flex-col cursor-pointer"
