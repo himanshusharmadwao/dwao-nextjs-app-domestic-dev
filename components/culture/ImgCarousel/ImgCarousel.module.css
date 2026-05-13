@@ -18,6 +18,11 @@
     display: flex !important;
 }
 
+.mySwiper :global(.swiper-button-prev) :global(.swiper-navigation-icon),
+.mySwiper :global(.swiper-button-next) :global(.swiper-navigation-icon) {
+    display: none;
+}
+
 .mySwiper :global(.swiper-button-prev) {
     left: 0;
 }
